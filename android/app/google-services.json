@@ -1,0 +1,69 @@
+{
+  "project_info": {
+    "project_number": "913077904838",
+    "firebase_url": "https://delight-to-server-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "delight-to-server",
+    "storage_bucket": "delight-to-server.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:913077904838:android:dc734a6f50fbd86a687ec7",
+        "android_client_info": {
+          "package_name": "com.example.orphanage"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "913077904838-aq8rferg17k5a3sieah00jsijor0c3ab.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCkwV442L3t520UXGE2eVnvro8HwAzEXGc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "913077904838-aq8rferg17k5a3sieah00jsijor0c3ab.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:913077904838:android:d798a8f61e9f75e0687ec7",
+        "android_client_info": {
+          "package_name": "com.example.pbl"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "913077904838-aq8rferg17k5a3sieah00jsijor0c3ab.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCkwV442L3t520UXGE2eVnvro8HwAzEXGc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "913077904838-aq8rferg17k5a3sieah00jsijor0c3ab.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
