@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
@@ -24,7 +25,10 @@ class _SignupState extends State<Signup> {
       usr.user!.updateDisplayName(data['aname']);
       // usr.additionalUserInfo!.profile!.addAll({"ashram": true});
       print(usr.additionalUserInfo!.profile);
-      usr.additionalUserInfo!.profile!.putIfAbsent("ashram", () => true);
+      FirebaseFirestore.instance
+          .collection("AshramUser")
+          .doc(usr.user!.uid)
+          .set({"name": data["aname"], "uid": usr.user!.uid});
       data.remove('password');
       data.remove("email");
       String loc = data["location"];

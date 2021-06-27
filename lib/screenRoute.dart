@@ -1,4 +1,5 @@
 import 'package:firebase_database/firebase_database.dart';
+import 'package:orphanage/auth/user.dart';
 
 import './auth/login.dart';
 import './auth/register.dart';
@@ -9,21 +10,17 @@ import 'package:firebase_auth/firebase_auth.dart';
 class screenRoute {
   static Route<dynamic> routeScreen(RouteSettings set) {
     var arg = set.arguments;
-    print(set.name);
-    FirebaseAuth usr = FirebaseAuth.instance;
-    // UserCredential usr =  FirebaseAuth.instance.getRedirectResult();
-    // print("entered");
-    if (usr.currentUser != null) {
-      print(usr.currentUser!.metadata);
-      print(usr.tenantId);
-    }
 
-    if (set.name == "/home") {
-      return MaterialPageRoute(builder: (build) => Home());
-    }
+    // if (set.name == "/home") {
+    //   return MaterialPageRoute(builder: (build) => Home());
+    // }
     switch (set.name) {
+      case "/home":
+        return MaterialPageRoute(builder: (build) => Home());
       case "/reg":
         return MaterialPageRoute(builder: (_) => Signup());
+      case "/profile":
+        return MaterialPageRoute(builder: (_) => UserProfile());
       default:
         return MaterialPageRoute(builder: (build) => Login());
     }

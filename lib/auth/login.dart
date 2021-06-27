@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
@@ -23,12 +24,22 @@ class _LoginState extends State<Login> {
 
   void _sigin(Map<String, dynamic> data) async {
     try {
-      print(data);
       UserCredential usr = await FirebaseAuth.instance
           .signInWithEmailAndPassword(
               email: data["email"], password: data['password']);
-
-      Navigator.of(context).popAndPushNamed("/home");
+      FirebaseFirestore.instance
+          .collection("AshramUser")
+          .where("uid", isEqualTo: usr.user!.uid)
+          .get()
+          .then((value) {
+        if (value.docs.isNotEmpty) {
+          appDataSet("usr", usr);
+          // Navigator.of(context).pop();
+          Navigator.of(context).popAndPushNamed("/home");
+        } else {
+          FirebaseAuth.instance.signOut();
+        }
+      });
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
         err = 'No user found for that email.';

@@ -1,6 +1,8 @@
 //@dart=2.9
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:orphanage/global/global.dart';
 // ignore: import_of_legacy_library_into_null_safe
 import 'package:slimy_card/slimy_card.dart';
 import 'package:intl/intl.dart';
@@ -72,9 +74,10 @@ class DonationList {
   }
 
   static Widget listBuild() {
+    UserCredential usr = appDataGet("usr");
     final Stream<QuerySnapshot> _usersStream = FirebaseFirestore.instance
         .collection("foodrequest")
-        .where("aname", isEqualTo: "ashram1")
+        .where("aname", isEqualTo: usr.user.displayName)
         .snapshots();
     return StreamBuilder<QuerySnapshot>(
         stream: _usersStream,
