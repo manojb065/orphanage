@@ -68,128 +68,169 @@ class _SignupState extends State<Signup> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData.dark(),
       onGenerateRoute: screenRoute.routeScreen,
       home: Scaffold(
         appBar: AppBar(
-          title: Text("Delight to Server"),
+          title: Text("Orphange"),
         ),
-        body: SingleChildScrollView(
-          child: FormBuilder(
-            key: _formkey,
-            child: Column(
-              children: [
-                FormBuilderTextField(
-                  name: "aname",
-                  keyboardType: TextInputType.name,
-                  maxLength: 13,
-                  autovalidateMode: AutovalidateMode.onUserInteraction,
-                  decoration: InputDecoration(
-                    labelText: "Orphanage Name *",
-                    prefixIcon: Icon(Icons.account_box_outlined),
-                    hintText: "Orphanage name",
-                  ),
-                  validator: FormBuilderValidators.compose([
-                    (val) {
-                      if (val!.contains(RegExp(r"[@#%]"))) {
-                        return "should not contain special charcter";
-                      }
-                    },
-                    FormBuilderValidators.required(context)
-                  ]),
-                ),
-                FormBuilderTextField(
-                  name: "phone",
-                  // maxLength: 13,
-                  keyboardType: TextInputType.number,
-                  autovalidateMode: AutovalidateMode.onUserInteraction,
-                  decoration: InputDecoration(
-                    labelText: "Phone *",
-                    prefixIcon: Icon(Icons.account_box_outlined),
-                    hintText: "xxx-xxx-xxxx",
-                  ),
-                  validator: FormBuilderValidators.compose([
-                    (val) {
-                      if (val!.length != 10) {
-                        return "enter valid phone number";
-                      }
-                    },
-                    FormBuilderValidators.required(context)
-                  ]),
-                ),
-                FormBuilderTextField(
-                  name: "location",
-                  // maxLength: 13,
-                  maxLines: 5,
-                  keyboardType: TextInputType.multiline,
-                  autovalidateMode: AutovalidateMode.onUserInteraction,
-                  decoration: InputDecoration(
-                    labelText: "location *",
-                    prefixIcon: Icon(Icons.account_box_outlined),
-                    // hintText: "",
-                  ),
-                  validator: FormBuilderValidators.compose(
-                      [FormBuilderValidators.required(context)]),
-                ),
-                FormBuilderTextField(
-                  name: "email",
-                  autovalidateMode: AutovalidateMode.onUserInteraction,
-                  decoration: InputDecoration(
-                    labelText: "Email *",
-                    prefixIcon: Icon(Icons.account_box_outlined),
-                    hintText: "example@gmail.com",
-                  ),
-                  validator: FormBuilderValidators.compose([
-                    FormBuilderValidators.email(context),
-                    FormBuilderValidators.required(context)
-                  ]),
-                ),
-                FormBuilderTextField(
-                  name: "password",
-                  keyboardType: TextInputType.text,
-                  obscureText: _showPassword,
-                  autovalidateMode: AutovalidateMode.onUserInteraction,
-                  decoration: InputDecoration(
-                      labelText: "Password *",
-                      prefixIcon: Icon(Icons.phone),
-                      hintText: "****",
-                      suffixIcon: _showPassword
-                          ? IconButton(
-                              onPressed: () {
-                                toggle();
-                              },
-                              icon: Icon(Icons.visibility_off))
-                          : IconButton(
-                              onPressed: () => toggle(),
-                              icon: Icon(Icons.visibility))),
-                  validator: FormBuilderValidators.compose([
-                    (val) {
-                      if (!val!.contains(RegExp(r"\d+\w+"))) {
-                        return "must contain 1 digit and 1 character";
-                      }
-                    },
-                    FormBuilderValidators.required(context)
-                  ]),
-                ),
-                ElevatedButton.icon(
-                    onPressed: () {
-                      if (_formkey.currentState!.validate()) {
-                        _formkey.currentState!.save();
-                      }
-                      _sigup(Map<String, dynamic>.from(
-                          _formkey.currentState!.value));
-                    },
-                    icon: Icon(Icons.send),
-                    label: Text("Register")),
-                TextButton(
-                    onPressed: () {
-                      Navigator.of(context).popAndPushNamed("/");
-                    },
-                    child: Text("have a account ? signin"))
-              ],
-            ),
-            autovalidateMode: AutovalidateMode.disabled,
+        body: Stack(children: [
+          Container(
+            decoration: BoxDecoration(
+                gradient: LinearGradient(
+                    colors: [Colors.black, Colors.blue],
+                    end: Alignment.topCenter,
+                    begin: Alignment.bottomCenter)),
           ),
-        ),
+          SingleChildScrollView(
+            child: FormBuilder(
+              key: _formkey,
+              child: Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: FormBuilderTextField(
+                      name: "aname",
+                      keyboardType: TextInputType.name,
+                      maxLength: 13,
+                      autovalidateMode: AutovalidateMode.onUserInteraction,
+                      decoration: InputDecoration(
+                        enabled: true,
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(60)),
+                        labelText: "Orphanage Name *",
+                        prefixIcon: Icon(Icons.account_box_outlined),
+                        hintText: "Orphanage name",
+                      ),
+                      validator: FormBuilderValidators.compose([
+                        (val) {
+                          if (val!.contains(RegExp(r"[@#%]"))) {
+                            return "should not contain special charcter";
+                          }
+                        },
+                        FormBuilderValidators.required(context)
+                      ]),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: FormBuilderTextField(
+                      name: "phone",
+                      // maxLength: 13,
+                      keyboardType: TextInputType.number,
+                      autovalidateMode: AutovalidateMode.onUserInteraction,
+                      decoration: InputDecoration(
+                        enabled: true,
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(60)),
+                        labelText: "Phone *",
+                        prefixIcon: Icon(Icons.account_box_outlined),
+                        hintText: "xxx-xxx-xxxx",
+                      ),
+                      validator: FormBuilderValidators.compose([
+                        (val) {
+                          if (val!.length != 10) {
+                            return "enter valid phone number";
+                          }
+                        },
+                        FormBuilderValidators.required(context)
+                      ]),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: FormBuilderTextField(
+                      name: "location",
+                      // maxLength: 13,
+                      maxLines: 5,
+                      keyboardType: TextInputType.multiline,
+                      autovalidateMode: AutovalidateMode.onUserInteraction,
+                      decoration: InputDecoration(
+                        enabled: true,
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(15)),
+                        labelText: "location *",
+                        prefixIcon: Icon(Icons.account_box_outlined),
+                        // hintText: "",
+                      ),
+                      validator: FormBuilderValidators.compose(
+                          [FormBuilderValidators.required(context)]),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: FormBuilderTextField(
+                      name: "email",
+                      autovalidateMode: AutovalidateMode.onUserInteraction,
+                      decoration: InputDecoration(
+                        enabled: true,
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(60)),
+                        labelText: "Email *",
+                        prefixIcon: Icon(Icons.account_box_outlined),
+                        hintText: "example@gmail.com",
+                      ),
+                      validator: FormBuilderValidators.compose([
+                        FormBuilderValidators.email(context),
+                        FormBuilderValidators.required(context)
+                      ]),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: FormBuilderTextField(
+                      name: "password",
+                      keyboardType: TextInputType.text,
+                      obscureText: _showPassword,
+                      autovalidateMode: AutovalidateMode.onUserInteraction,
+                      decoration: InputDecoration(
+                          enabled: true,
+                          border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(60)),
+                          labelText: "Password *",
+                          prefixIcon: Icon(Icons.phone),
+                          hintText: "****",
+                          suffixIcon: _showPassword
+                              ? IconButton(
+                                  onPressed: () {
+                                    toggle();
+                                  },
+                                  icon: Icon(Icons.visibility_off))
+                              : IconButton(
+                                  onPressed: () => toggle(),
+                                  icon: Icon(Icons.visibility))),
+                      validator: FormBuilderValidators.compose([
+                        (val) {
+                          if (!val!.contains(RegExp(r"\d+\w+"))) {
+                            return "must contain 1 digit and 1 character";
+                          }
+                        },
+                        FormBuilderValidators.required(context)
+                      ]),
+                    ),
+                  ),
+                  ElevatedButton.icon(
+                      onPressed: () {
+                        if (_formkey.currentState!.validate()) {
+                          _formkey.currentState!.save();
+                        }
+                        _sigup(Map<String, dynamic>.from(
+                            _formkey.currentState!.value));
+                      },
+                      icon: Icon(Icons.send),
+                      label: Text("Register")),
+                  TextButton(
+                      onPressed: () {
+                        Navigator.of(context).popAndPushNamed("/");
+                      },
+                      child: Text("have a account ? signin"))
+                ],
+              ),
+              autovalidateMode: AutovalidateMode.disabled,
+            ),
+          ),
+        ]),
       ),
     );
   }

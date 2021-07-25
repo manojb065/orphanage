@@ -34,8 +34,8 @@ class _LoginState extends State<Login> {
           .then((value) {
         if (value.docs.isNotEmpty) {
           appDataSet("usr", usr);
-          // Navigator.of(context).pop();
-          Navigator.of(context).popAndPushNamed("/home");
+          Navigator.of(context)
+              .pushNamedAndRemoveUntil("/home", (route) => false);
         } else {
           FirebaseAuth.instance.signOut();
         }
@@ -47,78 +47,114 @@ class _LoginState extends State<Login> {
         err = 'Wrong password provided for that user.';
       }
     }
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      content: Text(err),
-      duration: Duration(seconds: 5),
-    ));
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: Text(err),
+        // content: Text("check your email inbox"),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () {
+              FirebaseAuth.instance.signOut();
+              Navigator.of(ctx).popAndPushNamed("/");
+            },
+            child: Text("okay"),
+          ),
+        ],
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData.dark(),
       onGenerateRoute: screenRoute.routeScreen,
       home: Scaffold(
         appBar: AppBar(
-          title: Text("Delight to Server"),
+          title: Text("Orphange"),
         ),
-        body: FormBuilder(
-          key: _formkey,
-          child: Column(
-            children: [
-              FormBuilderTextField(
-                name: "email",
-                autovalidateMode: AutovalidateMode.onUserInteraction,
-                decoration: InputDecoration(
-                  labelText: "Email *",
-                  prefixIcon: Icon(Icons.account_box_outlined),
-                  hintText: "example@gmail.com",
-                ),
-                mouseCursor: MouseCursor.defer,
-                validator: FormBuilderValidators.compose([
-                  FormBuilderValidators.email(context),
-                  FormBuilderValidators.required(context)
-                ]),
-              ),
-              FormBuilderTextField(
-                name: "password",
-                keyboardType: TextInputType.text,
-                obscureText: _showPassword,
-                autovalidateMode: AutovalidateMode.onUserInteraction,
-                decoration: InputDecoration(
-                    labelText: "Password *",
-                    prefixIcon: Icon(Icons.lock),
-                    hintText: "****",
-                    suffixIcon: !_showPassword
-                        ? IconButton(
-                            onPressed: () {
-                              toggle();
-                            },
-                            icon: Icon(Icons.visibility_off))
-                        : IconButton(
-                            onPressed: () => toggle(),
-                            icon: Icon(Icons.visibility))),
-                validator: FormBuilderValidators.required(context,
-                    errorText: "Required"),
-              ),
-              ElevatedButton.icon(
-                  onPressed: () {
-                    if (_formkey.currentState!.validate()) {
-                      _formkey.currentState!.save();
-                    }
-                    _sigin(Map<String, dynamic>.from(
-                        _formkey.currentState!.value));
-                  },
-                  icon: Icon(Icons.send),
-                  label: Text("Login")),
-              TextButton(
-                  onPressed: () {
-                    Navigator.of(context).popAndPushNamed("/reg");
-                  },
-                  child: Text("click here ? signup"))
-            ],
+        body: Stack(children: [
+          Container(
+            decoration: BoxDecoration(
+                gradient: LinearGradient(
+                    colors: [Colors.black, Colors.blue],
+                    end: Alignment.topCenter,
+                    begin: Alignment.bottomCenter)),
           ),
-          autovalidateMode: AutovalidateMode.disabled,
-        ),
+          FormBuilder(
+            key: _formkey,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Padding(
+                  padding: EdgeInsets.only(bottom: 20),
+                  child: FormBuilderTextField(
+                    name: "email",
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
+                    decoration: InputDecoration(
+                      enabled: true,
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(60)),
+                      labelText: "Email *",
+                      prefixIcon: Icon(Icons.account_box_outlined),
+                      hintText: "example@gmail.com",
+                    ),
+                    mouseCursor: MouseCursor.defer,
+                    validator: FormBuilderValidators.compose([
+                      FormBuilderValidators.email(context),
+                      FormBuilderValidators.required(context)
+                    ]),
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(bottom: 20),
+                  child: FormBuilderTextField(
+                    name: "password",
+                    keyboardType: TextInputType.text,
+                    obscureText: _showPassword,
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
+                    decoration: InputDecoration(
+                        enabled: true,
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(60)),
+                        labelText: "Password *",
+                        prefixIcon: Icon(Icons.lock),
+                        hintText: "****",
+                        suffixIcon: !_showPassword
+                            ? IconButton(
+                                onPressed: () {
+                                  toggle();
+                                },
+                                icon: Icon(Icons.visibility_off))
+                            : IconButton(
+                                onPressed: () => toggle(),
+                                icon: Icon(Icons.visibility))),
+                    validator: FormBuilderValidators.required(context,
+                        errorText: "Required"),
+                  ),
+                ),
+                ElevatedButton.icon(
+                    onPressed: () {
+                      if (_formkey.currentState!.validate()) {
+                        _formkey.currentState!.save();
+                      }
+                      _sigin(Map<String, dynamic>.from(
+                          _formkey.currentState!.value));
+                    },
+                    icon: Icon(Icons.send),
+                    label: Text("Login")),
+                TextButton(
+                    onPressed: () {
+                      Navigator.of(context).popAndPushNamed("/reg");
+                    },
+                    child: Text("click here ? signup"))
+              ],
+            ),
+            autovalidateMode: AutovalidateMode.disabled,
+          ),
+        ]),
       ),
     );
   }

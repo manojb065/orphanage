@@ -18,7 +18,7 @@ class UserProfile extends StatelessWidget {
     // fetchData();
     return Scaffold(
       appBar: AppBar(
-        title: Text("Delight to Server"),
+        title: Text("Orphanage"),
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -143,6 +143,8 @@ class UserProfile extends StatelessWidget {
                       child: Text("reset")),
                   ElevatedButton.icon(
                       onPressed: () async {
+                        UserCredential usr = appDataGet("usr");
+                        // usr.user!.updateDisplayName("Ashram1");
                         await FirebaseAuth.instance.signOut();
                         Navigator.of(context).popAndPushNamed("/");
                       },

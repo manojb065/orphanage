@@ -1,13 +1,67 @@
 //@dart=2.9
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:orphanage/global/global.dart';
-// ignore: import_of_legacy_library_into_null_safe
-import 'package:slimy_card/slimy_card.dart';
 import 'package:intl/intl.dart';
 
 class DonationList {
+  static void _showDetail(
+      BuildContext con, String name, String phone, String id) {
+    Navigator.of(con).push(MaterialPageRoute(builder: (build) {
+      return Scaffold(
+        body: Card(
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(60))),
+          elevation: 20,
+          shadowColor: Colors.transparent,
+          child: Column(
+            children: [
+              Image.asset("assets/img/food.jpg"),
+              ListTile(
+                autofocus: true,
+                title: Text(
+                  name,
+                  textAlign: TextAlign.center,
+                ),
+                subtitle: Text(
+                  phone,
+                  textAlign: TextAlign.center,
+                ),
+              ),
+              ButtonBar(
+                alignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  IconButton(
+                      onPressed: () async {
+                        print(id);
+                        await FirebaseFirestore.instance
+                            .collection("foodrequest")
+                            .doc(id)
+                            .update({"status": true});
+                        Navigator.of(con).pop(true);
+                      },
+                      icon: Icon(Icons.thumb_up)),
+                  IconButton(
+                      onPressed: () async {
+                        print(id);
+                        await FirebaseFirestore.instance
+                            .collection("foodrequest")
+                            .doc(id)
+                            .delete();
+                        Navigator.of(con).pop(true);
+                      },
+                      icon: Icon(Icons.thumb_down)),
+                ],
+              ),
+            ],
+          ),
+        ),
+      );
+    }));
+  }
+
   static Widget topCard(
       BuildContext build, Map<String, dynamic> data, String id) {
     var d = DateTime.fromMicrosecondsSinceEpoch(
@@ -15,60 +69,36 @@ class DonationList {
 
     String Date = DateFormat('yyyy-MM-dd').format(d);
     String Time = DateFormat("kk:mm").format(d);
-    return Padding(
-      padding: EdgeInsetsDirectional.only(top: 5),
-      child: SlimyCard(
-        color: Colors.red,
-        width: MediaQuery.of(build).size.width - 30,
-        topCardHeight: 200,
-        bottomCardHeight: 100,
-        borderRadius: 20,
-        topCardWidget: Column(
-          children: [
-            Text(
-              "${data['name']}",
-              style: TextStyle(fontSize: 20),
-            ),
-            Text(
-              "${data['phone']}",
-              style: TextStyle(fontSize: 20),
-            ),
-            Text(
-              "$Date",
-              style: TextStyle(fontSize: 20),
-            ),
-            Text(
-              "$Time",
-              style: TextStyle(fontSize: 20),
-            ),
-            Text(
-              "${data['status']}",
-              style: TextStyle(fontSize: 20),
-            ),
-          ],
+    return GestureDetector(
+      onTap: () => _showDetail(build, data["name"], data['phone'], id),
+      child: Card(
+        shadowColor: Colors.white24,
+        elevation: 10,
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(30))),
+        child: ListTile(
+          contentPadding: EdgeInsets.only(top: 10, bottom: 10, right: 20),
+          // minVerticalPadding: 10,
+          title: Text(
+            "${data['name']}",
+            textAlign: TextAlign.center,
+            style: TextStyle(fontSize: 20),
+          ),
+          subtitle: Text(
+            "${Date}",
+            textAlign: TextAlign.center,
+            style: TextStyle(fontSize: 20),
+          ),
+          trailing: data['status']
+              ? Icon(
+                  Icons.thumb_up,
+                  color: Colors.green,
+                )
+              : CircularProgressIndicator(
+                  strokeWidth: 2,
+                  color: Colors.red,
+                ),
         ),
-        bottomCardWidget: ButtonBar(
-          alignment: MainAxisAlignment.spaceBetween,
-          children: [
-            IconButton(
-                onPressed: () async {
-                  await FirebaseFirestore.instance
-                      .collection("foodrequest")
-                      .doc(id)
-                      .update({"status": true});
-                },
-                icon: Icon(Icons.thumb_up)),
-            IconButton(
-                onPressed: () async {
-                  await FirebaseFirestore.instance
-                      .collection("foodrequest")
-                      .doc(id)
-                      .delete();
-                },
-                icon: Icon(Icons.thumb_down)),
-          ],
-        ),
-        slimeEnabled: true,
       ),
     );
   }
@@ -100,9 +130,7 @@ class DonationList {
           snapshot.data.docs.forEach((element) {
             id.add(element.id);
             d.add(Map<String, dynamic>.from(element.data()));
-            // print(element.data().runtimeType);
           });
-          // print(snapshot.data.docs.runtimeType);
           return ListView.builder(
               itemCount: d.length,
               itemBuilder: (build, ind) {
